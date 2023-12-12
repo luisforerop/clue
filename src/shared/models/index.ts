@@ -5,6 +5,7 @@ export interface IStageBasic {
   award?: AwardType
   nextClue?: string
   isAllowed: boolean
+  id: string
 }
 
 export interface IStageHangman extends IStageBasic {
