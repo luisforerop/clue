@@ -5,6 +5,7 @@ import { appConfig } from '../shared/secrets'
 
 export interface ScreensContextType {
   currentStageIndex: number
+  currentStage: IStage | null
   stages: IStage[]
   userLogged: PossibleUserLoggedState
   currentView: PossibleView
@@ -13,6 +14,7 @@ export interface ScreensContextType {
   login: (typedPassword: string) => void
   next: () => void
   openStage: (stageIndex: number) => void
+  goTo: (viewToGo: PossibleView) => void
 }
 
 const ScreensContext = createContext({} as ScreensContextType)
@@ -28,6 +30,7 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const [currentView, setCurrentView] = useState<PossibleView>('init')
   const [password, setPassword] = useState('1234')
   const [gameTitle, setGameTitle] = useState('')
+  const [currentStage, setCurrentStage] = useState<IStage | null>(null)
 
   const login = (typedPassword: string) => {
     if (typedPassword === password) {
@@ -51,20 +54,34 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const openStage = (stageIndex: number) => {
-    if (stages[stageIndex].isAllowed) {
+    const currentStage = stages[stageIndex]
+    if (currentStage.isAllowed) {
       setCurrentView(() => {
         setCurrentStageIndex(stageIndex)
+        setCurrentStage(currentStage)
         return 'stage'
       })
     }
   }
 
+  const goTo = (possibleView: PossibleView) => setCurrentView(possibleView)
+
   useEffect(() => {
     const { mainPassword, stages, gameTitle } = appConfig
+    const userIsLogged = !!localStorage.getItem('userIsLogged')
+
+    if (userIsLogged) {
+      setUserLogged('logged')
+      setCurrentView('home')
+    }
     setPassword(mainPassword)
     setStages(stages)
     setGameTitle(gameTitle)
   }, [])
+
+  useEffect(() => {
+    console.log({ currentStage })
+  }, [currentStage])
 
   const context: ScreensContextType = {
     stages,
@@ -76,6 +93,8 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     login,
     next,
     openStage,
+    goTo,
+    currentStage,
   }
 
   return <Provider value={context}>{children}</Provider>
