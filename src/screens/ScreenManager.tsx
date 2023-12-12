@@ -2,7 +2,7 @@ import { AddWords, CompleteStepByStep, HangmanGame, Home, Start } from '.'
 import { useScreensContext } from '../providers'
 import { PossibleStageType } from '../shared/models'
 
-const Stages: { [key in PossibleStageType]: () => JSX.Element } = {
+const Stages: { [key in PossibleStageType]: () => JSX.Element | null } = {
   complete: CompleteStepByStep,
   add: AddWords,
   hangman: HangmanGame,
