@@ -6,6 +6,7 @@ function App() {
   return (
     <ScreensProvider>
       <ScreenManager />
+      <div id="award-modal" />
     </ScreensProvider>
   )
 }

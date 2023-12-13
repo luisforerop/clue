@@ -24,11 +24,10 @@ export interface IStageCompleteStepByStep extends IStageBasic {
 }
 
 export type AwardType = {
-  type: 'text' | 'image'
   image?: {
     src: string
-    description?: string
   }
+  text?: string
 }
 
 export interface IHangmanData {

@@ -1,64 +1,15 @@
-import { FC, useEffect, useMemo, useState } from 'react'
-import { GameHeader } from '../../components'
+import { useEffect, useMemo, useState } from 'react'
+import { EmptyMessage, GameHeader } from '../../components'
 import { useScreensContext } from '../../providers'
-
-const getColor = () => {
-  const color = Math.floor(Math.random() * 16777215).toString(16)
-  return `#${'0'.repeat(6 - color.length)}${color}`
-}
-
-const WordsAddedList: FC<{ wordsAdded: string[] }> = ({ wordsAdded }) => {
-  return (
-    <ul className="flex gap-3 flex-wrap">
-      {wordsAdded.map((word) => (
-        <li
-          className="px-3 py-1 rounded"
-          key={word}
-          style={{ backgroundColor: getColor() }}
-        >
-          {word}
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-const EmptyMessage = () => <p>Aún no has agregado palabras</p>
-
-const AddWordsForm: FC<{
-  addWord: (evt: React.FormEvent<HTMLFormElement>) => void
-}> = ({ addWord }) => {
-  return (
-    <form className="flex gap-2 w-full" onSubmit={addWord}>
-      <input
-        className="flex-1 p-3 rounded"
-        type="text"
-        placeholder="Agrega una palabra"
-      />
-      <button>Agregar</button>
-    </form>
-  )
-}
-
-const Win = () => {
-  const { next } = useScreensContext()
-  return (
-    <div className="flex flex-col gap-2">
-      <h2 className="w-full text-center text-2xl font-semibold">
-        ¡Lo has logrado!
-      </h2>
-      <button className="w-full" onClick={next}>
-        Vamos al siguiente
-      </button>
-    </div>
-  )
-}
+import { AddWordsForm, Win, WordsAddedList } from './components'
+import { AwardModal } from '../../components/AwardModal'
 
 export const AddWords = () => {
   const { currentStage } = useScreensContext()
 
   const [wordsAdded, setWordsAdded] = useState<string[]>([])
   const [levelCompleted, setLevelCompleted] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
 
   const listId = useMemo(() => `${currentStage?.id}-list`, [currentStage])
   const listOfWordsToAdd = useMemo(() => {
@@ -109,6 +60,7 @@ export const AddWords = () => {
   useEffect(() => {
     if (listOfWordsToAdd.length === wordsAdded.length) {
       setLevelCompleted(true)
+      setOpenModal(true)
     }
   }, [listOfWordsToAdd, wordsAdded])
 
@@ -127,6 +79,7 @@ export const AddWords = () => {
         )}
       </div>
       {levelCompleted ? <Win /> : <AddWordsForm addWord={addWord} />}
+      <AwardModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </div>
   )
 }
