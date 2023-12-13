@@ -2,6 +2,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { IStage, PossibleUserLoggedState, PossibleView } from '../shared/models'
 import { appConfig } from '../shared/secrets'
+import { useGetStages } from '../hooks/useGetStages'
 
 export interface ScreensContextType {
   currentStageIndex: number
@@ -24,8 +25,9 @@ export const useScreensContext = () => useContext(ScreensContext)
 export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = ScreensContext
 
+  const { setStages, stages } = useGetStages()
+
   const [userLogged, setUserLogged] = useState<PossibleUserLoggedState>('none')
-  const [stages, setStages] = useState<IStage[]>([])
   const [currentStageIndex, setCurrentStageIndex] = useState(0)
   const [currentView, setCurrentView] = useState<PossibleView>('init')
   const [password, setPassword] = useState('1234')
@@ -67,7 +69,7 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const goTo = (possibleView: PossibleView) => setCurrentView(possibleView)
 
   useEffect(() => {
-    const { mainPassword, stages, gameTitle } = appConfig
+    const { mainPassword, gameTitle } = appConfig
     const userIsLogged = !!localStorage.getItem('userIsLogged')
 
     if (userIsLogged) {
@@ -75,13 +77,8 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
       setCurrentView('home')
     }
     setPassword(mainPassword)
-    setStages(stages)
     setGameTitle(gameTitle)
   }, [])
-
-  useEffect(() => {
-    console.log({ currentStage })
-  }, [currentStage])
 
   const context: ScreensContextType = {
     stages,
