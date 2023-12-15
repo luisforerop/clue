@@ -42,8 +42,7 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const [password, setPassword] = useState('1234')
   const [gameTitle, setGameTitle] = useState('')
   const [currentStage, setCurrentStage] = useState<IStage | null>(null)
-  const [currentStageType, setCurrentStageType] =
-    useState<PossibleCurrentStageType>('full')
+  const [currentStageType] = useState<PossibleCurrentStageType>('full')
 
   const login = (typedPassword: string) => {
     if (typedPassword === password) {
