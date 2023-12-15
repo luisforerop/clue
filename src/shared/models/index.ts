@@ -4,7 +4,6 @@ export interface IStageBasic {
   data: any
   award?: AwardType
   nextClue?: string
-  isAllowed: boolean
   id: string
 }
 

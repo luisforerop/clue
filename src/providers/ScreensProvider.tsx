@@ -16,6 +16,7 @@ export interface ScreensContextType {
   next: () => void
   openStage: (stageIndex: number) => void
   goTo: (viewToGo: PossibleView) => void
+  allowedStages: string[]
 }
 
 const ScreensContext = createContext({} as ScreensContextType)
@@ -25,7 +26,7 @@ export const useScreensContext = () => useContext(ScreensContext)
 export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = ScreensContext
 
-  const { setStages, stages } = useGetStages()
+  const { stages, addNewAllowedStage, allowedStages } = useGetStages()
 
   const [userLogged, setUserLogged] = useState<PossibleUserLoggedState>('none')
   const [currentStageIndex, setCurrentStageIndex] = useState(0)
@@ -45,19 +46,16 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const next = () => {
+    if (!currentStage) return
+
     setCurrentView('home')
-    setStages((curr) =>
-      curr.map((stage, index) => ({
-        ...stage,
-        isAllowed: index === currentStageIndex + 1 ? true : stage.isAllowed,
-      }))
-    )
+    addNewAllowedStage(stages[currentStageIndex + 1].id)
     setCurrentStageIndex((curr) => curr + 1)
   }
 
   const openStage = (stageIndex: number) => {
     const currentStage = stages[stageIndex]
-    if (currentStage.isAllowed) {
+    if (allowedStages.includes(currentStage.id)) {
       setCurrentView(() => {
         setCurrentStageIndex(stageIndex)
         setCurrentStage(currentStage)
@@ -92,6 +90,7 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     openStage,
     goTo,
     currentStage,
+    allowedStages,
   }
 
   return <Provider value={context}>{children}</Provider>

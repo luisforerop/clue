@@ -1,48 +1,47 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { IStage } from '../shared/models'
 import { appConfig } from '../shared/secrets'
 
-const getStagesFromLocal = (): IStage[] => {
+const getAllowedStagesFromLocal = (): string[] => {
   try {
-    const localCurrentVersion =
-      localStorage.getItem('currentVersion') ?? 'unknown'
-
-    if (localCurrentVersion !== appConfig.currentVersion) {
-      localStorage.removeItem('stages')
-      localStorage.setItem('currentVersion', appConfig.currentVersion)
-      return []
-    }
-
-    return JSON.parse(localStorage.getItem('stages') ?? '[]')
+    return JSON.parse(localStorage.getItem('allowedStages') ?? '[]')
   } catch (error) {
     console.error({ error })
 
-    localStorage.removeItem('stages')
+    localStorage.removeItem('allowedStages')
     return []
   }
 }
 
 export const useGetStages = () => {
   const [stages, setStages] = useState<IStage[]>([])
+  const [allowedStages, setAllowedStages] = useState<string[]>([])
+
+  const addNewAllowedStage = useCallback(
+    (stageId: string) => setAllowedStages((curr) => curr.concat(stageId)),
+    [allowedStages]
+  )
 
   useEffect(() => {
-    const localStages = getStagesFromLocal()
-    console.log({ localStages })
+    const localStages = getAllowedStagesFromLocal()
 
-    const updatedStages: IStage[] =
-      localStages.length === 0 ? appConfig.stages : localStages
+    const updatedAllowedStages: string[] =
+      localStages.length === 0 ? [appConfig.stages[0].id] : localStages
 
-    setStages(updatedStages)
+    setStages(appConfig.stages)
+    setAllowedStages(updatedAllowedStages)
   }, [])
 
   useEffect(() => {
-    if (stages.length > 0) {
-      localStorage.setItem('stages', JSON.stringify(stages))
+    if (allowedStages.length > 0) {
+      localStorage.setItem('allowedStages', JSON.stringify(allowedStages))
     }
-  }, [stages])
+  }, [allowedStages])
 
   return {
     stages,
     setStages,
+    allowedStages,
+    addNewAllowedStage,
   }
 }
