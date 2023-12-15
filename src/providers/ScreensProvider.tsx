@@ -1,11 +1,17 @@
 import type { FC, PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { IStage, PossibleUserLoggedState, PossibleView } from '../shared/models'
+import { useGetStages, useGetTemoralStages } from '../hooks'
+import {
+  IStage,
+  ITemporalStagesState,
+  PossibleUserLoggedState,
+  PossibleView,
+} from '../shared/models'
 import { appConfig } from '../shared/secrets'
-import { useGetStages } from '../hooks/useGetStages'
+
+type PossibleCurrentStageType = 'full' | 'temporal' | 'none'
 
 export interface ScreensContextType {
-  currentStageIndex: number
   currentStage: IStage | null
   stages: IStage[]
   userLogged: PossibleUserLoggedState
@@ -14,9 +20,11 @@ export interface ScreensContextType {
   gameTitle: string
   login: (typedPassword: string) => void
   next: () => void
-  openStage: (stageIndex: number) => void
+  openStage: (stage: IStage) => void
   goTo: (viewToGo: PossibleView) => void
   allowedStages: string[]
+  temporalStages: ITemporalStagesState
+  currentStageType: PossibleCurrentStageType
 }
 
 const ScreensContext = createContext({} as ScreensContextType)
@@ -27,13 +35,15 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = ScreensContext
 
   const { stages, addNewAllowedStage, allowedStages } = useGetStages()
+  const temporalStages = useGetTemoralStages()
 
   const [userLogged, setUserLogged] = useState<PossibleUserLoggedState>('none')
-  const [currentStageIndex, setCurrentStageIndex] = useState(0)
   const [currentView, setCurrentView] = useState<PossibleView>('init')
   const [password, setPassword] = useState('1234')
   const [gameTitle, setGameTitle] = useState('')
   const [currentStage, setCurrentStage] = useState<IStage | null>(null)
+  const [currentStageType, setCurrentStageType] =
+    useState<PossibleCurrentStageType>('full')
 
   const login = (typedPassword: string) => {
     if (typedPassword === password) {
@@ -46,18 +56,27 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const next = () => {
+    //
     if (!currentStage) return
 
+    const currentStageIndex = stages.findIndex(
+      ({ id }) => currentStage.id === id
+    )
+
     setCurrentView('home')
+
+    if (currentStageIndex === -1) return
     addNewAllowedStage(stages[currentStageIndex + 1].id)
-    setCurrentStageIndex((curr) => curr + 1)
   }
 
-  const openStage = (stageIndex: number) => {
-    const currentStage = stages[stageIndex]
-    if (allowedStages.includes(currentStage.id)) {
+  /* TODO: REPLANTEAR LA APERTURA DE LOS NIVELES */
+  const openStage = (currentStage: IStage) => {
+    const stageAllowed =
+      allowedStages.includes(currentStage.id) ||
+      temporalStages.allowedStages.includes(currentStage.id)
+
+    if (stageAllowed) {
       setCurrentView(() => {
-        setCurrentStageIndex(stageIndex)
         setCurrentStage(currentStage)
         return 'stage'
       })
@@ -80,7 +99,6 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const context: ScreensContextType = {
     stages,
-    currentStageIndex,
     userLogged,
     currentView,
     password,
@@ -91,6 +109,8 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     goTo,
     currentStage,
     allowedStages,
+    temporalStages,
+    currentStageType,
   }
 
   return <Provider value={context}>{children}</Provider>

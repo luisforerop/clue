@@ -1,4 +1,6 @@
+import { StagesList } from '../../components'
 import { useScreensContext } from '../../providers'
+import { TemporalStages } from './TemporalStages'
 
 export const Home = () => {
   const { stages, openStage, allowedStages } = useScreensContext()
@@ -6,23 +8,12 @@ export const Home = () => {
   return (
     <div className="flex flex-col gap-8 p-8">
       <h1 className="text-4xl font-semibold">Es tiempo de jugar</h1>
-      <ul className="flex flex-col gap-4 ">
-        {stages.map(({ name, id }, intexStage) => (
-          <li
-            key={intexStage}
-            className="w-full"
-            style={{ opacity: allowedStages.includes(id) ? '1' : '0.5' }}
-          >
-            <button
-              className="w-full"
-              disabled={!allowedStages.includes(id)}
-              onClick={() => openStage(intexStage)}
-            >
-              {name}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <TemporalStages />
+      <StagesList
+        allowedStages={allowedStages}
+        openStage={openStage}
+        stages={stages}
+      />
     </div>
   )
 }

@@ -9,14 +9,15 @@ const Stages: { [key in PossibleStageType]: () => JSX.Element | null } = {
 }
 
 export const ScreenManager = () => {
-  const { userLogged, currentView, currentStageIndex, stages } =
-    useScreensContext()
+  const { userLogged, currentView, currentStage } = useScreensContext()
 
   if (userLogged !== 'logged') return <Start />
 
   if (currentView === 'home') return <Home />
 
-  const Stage = Stages[stages[currentStageIndex].type]
+  if (!currentStage) return null
+
+  const Stage = Stages[currentStage.type]
 
   return <Stage />
 }

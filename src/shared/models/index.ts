@@ -57,3 +57,22 @@ export type StateType<StateValueType = any> = {
   set: React.Dispatch<React.SetStateAction<StateValueType>>
   value: StateValueType
 }
+
+/* TEMPORAL STAGES  */
+export type TemporalStagesAdType = {
+  title: string
+  description: string
+}
+
+export type ITemporalStagesConfig = {
+  stages: IStage[]
+  limitDate: string | Date
+  ad?: TemporalStagesAdType | null
+  id: string
+}
+
+export interface ITemporalStagesState extends ITemporalStagesConfig {
+  allowedStages: string[]
+  nextTemporalStage: () => void
+  limitDate: Date
+}

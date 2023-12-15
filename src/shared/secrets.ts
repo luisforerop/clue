@@ -1,4 +1,4 @@
-import { IStage } from './models'
+import { IStage, ITemporalStagesConfig } from './models'
 
 const stages: IStage[] = [
   {
@@ -99,8 +99,32 @@ const stages: IStage[] = [
   },
 ]
 
+const temporalStagesList: IStage[] = [
+  {
+    id: '151223-01',
+    name: '👩‍❤️‍👨 Nosotros',
+    type: 'add',
+    award: {
+      text: `Hoy, aunque el día está oscuro, tú brillas con tu luz.\n\nAunque el sol no sale, tú, mi sol, calienta mi día.\n\nY se qué aunque tenemos mucho por crecer, lo más lindo es pensar en que caminando juntos este camino hasta donde pondamos, llegaremos a esta playa, convertidos en la versión de nosotros mismos por la que tanto habremos trabajado, juntos.`,
+      image: {
+        src: 'https://res.cloudinary.com/dzufcfibp/image/upload/v1702669954/clue/felipe/bgeums8dditroiy8qdn6.png',
+      },
+    },
+    data: {
+      words: ['copito', 'lindurita'],
+    },
+  },
+]
+
+const temporalStages: ITemporalStagesConfig = {
+  limitDate: '',
+  stages: temporalStagesList,
+  id: '151223',
+}
+
 export const appConfig = {
   mainPassword: '0615',
   stages,
   gameTitle: 'Que empiece el juego',
+  temporalStages,
 }
