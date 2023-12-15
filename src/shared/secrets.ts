@@ -109,4 +109,5 @@ export const appConfig = {
   mainPassword: '0615',
   stages,
   gameTitle: 'Que empiece el juego',
+  currentVersion: '2.0.1',
 }

@@ -4,6 +4,15 @@ import { appConfig } from '../shared/secrets'
 
 const getStagesFromLocal = (): IStage[] => {
   try {
+    const localCurrentVersion =
+      localStorage.getItem('currentVersion') ?? 'unknown'
+
+    if (localCurrentVersion !== appConfig.currentVersion) {
+      localStorage.removeItem('stages')
+      localStorage.setItem('currentVersion', appConfig.currentVersion)
+      return []
+    }
+
     return JSON.parse(localStorage.getItem('stages') ?? '[]')
   } catch (error) {
     console.error({ error })
@@ -18,15 +27,15 @@ export const useGetStages = () => {
 
   useEffect(() => {
     const localStages = getStagesFromLocal()
+    console.log({ localStages })
+
     const updatedStages: IStage[] =
-      localStages?.length === 0 ? appConfig.stages : localStages
+      localStages.length === 0 ? appConfig.stages : localStages
 
     setStages(updatedStages)
   }, [])
 
   useEffect(() => {
-    console.log({ stages })
-
     if (stages.length > 0) {
       localStorage.setItem('stages', JSON.stringify(stages))
     }
