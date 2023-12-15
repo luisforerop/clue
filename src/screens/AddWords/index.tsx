@@ -1,15 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import { EmptyMessage, GameHeader } from '../../components'
+import { EmptyMessage, GameLayout } from '../../components'
 import { useScreensContext } from '../../providers'
-import { AddWordsForm, Win, WordsAddedList } from './components'
-import { AwardModal } from '../../components/AwardModal'
+import { WordsAddedList } from './components'
 
 export const AddWords = () => {
   const { currentStage } = useScreensContext()
 
   const [wordsAdded, setWordsAdded] = useState<string[]>([])
-  const [levelCompleted, setLevelCompleted] = useState(false)
-  const [openModal, setOpenModal] = useState(false)
 
   const listId = useMemo(() => `${currentStage?.id}-list`, [currentStage])
   const listOfWordsToAdd = useMemo(() => {
@@ -57,29 +54,18 @@ export const AddWords = () => {
     } catch (error) {}
   }, [])
 
-  useEffect(() => {
-    if (listOfWordsToAdd.length === wordsAdded.length) {
-      setLevelCompleted(true)
-      setOpenModal(true)
-    }
-  }, [listOfWordsToAdd, wordsAdded])
-
   return (
-    <div className="flex flex-col justify-between h-full p-4 gap-8">
-      <GameHeader
-        currentProgress={wordsAdded.length}
-        total={listOfWordsToAdd.length}
-        title={currentStage?.name ?? ''}
-      />
-      <div className="flex-1">
-        {wordsAdded.length ? (
-          <WordsAddedList wordsAdded={wordsAdded} />
-        ) : (
-          <EmptyMessage />
-        )}
-      </div>
-      {levelCompleted ? <Win /> : <AddWordsForm addWord={addWord} />}
-      <AwardModal isOpen={openModal} onClose={() => setOpenModal(false)} />
-    </div>
+    <GameLayout
+      currentProgress={wordsAdded.length}
+      total={listOfWordsToAdd.length}
+      title={currentStage?.name ?? ''}
+      addWord={addWord}
+    >
+      {wordsAdded.length ? (
+        <WordsAddedList wordsAdded={wordsAdded} />
+      ) : (
+        <EmptyMessage />
+      )}
+    </GameLayout>
   )
 }

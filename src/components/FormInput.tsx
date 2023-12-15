@@ -1,10 +1,10 @@
 import { FC } from 'react'
 
-type AddWordsFormProps = {
+export type FormInputProps = {
   addWord: (evt: React.FormEvent<HTMLFormElement>) => void
 }
 
-export const AddWordsForm: FC<AddWordsFormProps> = ({ addWord }) => {
+export const FormInput: FC<FormInputProps> = ({ addWord }) => {
   return (
     <form className="flex gap-2 w-full" onSubmit={addWord}>
       <input

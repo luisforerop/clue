@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useScreensContext } from '../../providers'
 
-type GameHeaderProps = {
+export type GameHeaderProps = {
   total: number
   currentProgress: number
   title: string

@@ -1,6 +1,6 @@
-import { useScreensContext } from '../../../providers'
+import { useScreensContext } from '../providers'
 
-export const Win = () => {
+export const WinComponent = () => {
   const { next } = useScreensContext()
   return (
     <div className="flex flex-col gap-2">

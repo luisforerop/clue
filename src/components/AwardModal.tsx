@@ -3,7 +3,7 @@ import { useScreensContext } from '../providers'
 import { Modal } from './Modal'
 import Markdown from 'react-markdown'
 
-type AwardModalProps = {
+export type AwardModalProps = {
   isOpen: boolean
   onClose?: () => void
 }

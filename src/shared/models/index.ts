@@ -39,8 +39,13 @@ export interface IAddWordsData {
   words: string[]
 }
 
+export type WordToCompleteType = {
+  word: string
+  type: 'complete' | 'show'
+}
+
 export interface ICompleteStepByStepData {
-  words: string[]
+  words: WordToCompleteType[]
 }
 
 export type PossibleView = 'init' | 'home' | 'stage' | 'gallery'

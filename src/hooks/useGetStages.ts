@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { IStage } from '../shared/models'
 import { appConfig } from '../shared/secrets'
 
-const getStagesFromLocal = (): IStage[] | null => {
+const getStagesFromLocal = (): IStage[] => {
   try {
     return JSON.parse(localStorage.getItem('stages') ?? '[]')
   } catch (error) {
     console.error({ error })
 
     localStorage.removeItem('stages')
-    return null
+    return []
   }
 }
 
@@ -18,8 +18,8 @@ export const useGetStages = () => {
 
   useEffect(() => {
     const localStages = getStagesFromLocal()
-    const updatedStages = localStages ?? appConfig.stages
-    console.log({ localStages, updatedStages })
+    const updatedStages: IStage[] =
+      localStages?.length === 0 ? appConfig.stages : localStages
 
     setStages(updatedStages)
   }, [])
