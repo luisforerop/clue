@@ -1,4 +1,4 @@
-import { IStage, ITemporalStagesConfig } from './models'
+import { EventType, IStage, ITemporalStagesConfig } from './models'
 
 const stages: IStage[] = [
   {
@@ -99,7 +99,7 @@ const stages: IStage[] = [
   },
 ]
 
-const temporalStagesList: IStage[] = [
+const sixthMonthStages: IStage[] = [
   {
     id: '151223-01',
     name: '👩‍❤️‍👨 Nosotros',
@@ -116,15 +116,57 @@ const temporalStagesList: IStage[] = [
   },
 ]
 
+const chrismasStages: IStage[] = [
+  {
+    id: '251223-01',
+    name: '👩‍❤️‍👨 Tu regalito',
+    type: 'complete',
+    award: {
+      text: `Hoy, aunque el día está oscuro, tú brillas con tu luz.\n\nAunque el sol no sale, tú, mi sol, calienta mi día.\n\nY se qué aunque tenemos mucho por crecer, lo más lindo es pensar en que caminando juntos este camino hasta donde pondamos, llegaremos a esta playa, convertidos en la versión de nosotros mismos por la que tanto habremos trabajado, juntos.`,
+    },
+    data: {
+      words: [
+        { type: 'show', word: 'Caja' },
+        { type: 'complete', word: 'registradora' },
+      ],
+    },
+  },
+]
+
 const temporalStages: ITemporalStagesConfig = {
   limitDate: '',
-  stages: temporalStagesList,
+  stages: sixthMonthStages,
   id: '151223',
 }
+
+const events: EventType[] = [
+  {
+    id: '01',
+    allowedStages: ['01', '02', '03'],
+    eventName: 'Nosotros en el 2023',
+    stages: stages,
+    limitDate: '',
+  },
+  {
+    id: '02-months',
+    allowedStages: ['151223-01'],
+    eventName: 'Feliz sexto mes',
+    stages: sixthMonthStages,
+    limitDate: '',
+  },
+  {
+    id: '03-chrismas',
+    allowedStages: ['251223-01'],
+    eventName: 'Feliz navidad',
+    stages: chrismasStages,
+    limitDate: '',
+  },
+]
 
 export const appConfig = {
   mainPassword: '0615',
   stages,
   gameTitle: 'Que empiece el juego',
   temporalStages,
+  events,
 }

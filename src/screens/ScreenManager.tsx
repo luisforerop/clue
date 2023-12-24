@@ -1,4 +1,11 @@
-import { AddWords, CompleteStepByStep, HangmanGame, Home, Start } from '.'
+import {
+  AddWords,
+  CompleteStepByStep,
+  Games,
+  HangmanGame,
+  Home,
+  Start,
+} from '.'
 import { useScreensContext } from '../providers'
 import { PossibleStageType } from '../shared/models'
 
@@ -12,6 +19,8 @@ export const ScreenManager = () => {
   const { userLogged, currentView, currentStage } = useScreensContext()
 
   if (userLogged !== 'logged') return <Start />
+
+  if (currentView === 'games') return <Games />
 
   if (currentView === 'home') return <Home />
 

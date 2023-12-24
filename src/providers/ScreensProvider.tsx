@@ -2,6 +2,8 @@ import type { FC, PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useGetStages, useGetTemoralStages } from '../hooks'
 import {
+  EventType,
+  IGallery,
   IStage,
   ITemporalStagesState,
   PossibleUserLoggedState,
@@ -14,17 +16,25 @@ type PossibleCurrentStageType = 'full' | 'temporal' | 'none'
 export interface ScreensContextType {
   currentStage: IStage | null
   stages: IStage[]
+  allowedStages: string[]
+
+  next: () => void
+  openStage: (stage: IStage) => void
+  currentStageType: PossibleCurrentStageType
+
+  events: EventType[]
+  setCurrentEvent: (event: EventType) => void // carga cs s as
+  currentEvent: EventType | null
+
   userLogged: PossibleUserLoggedState
   currentView: PossibleView
   password: string
   gameTitle: string
   login: (typedPassword: string) => void
-  next: () => void
-  openStage: (stage: IStage) => void
   goTo: (viewToGo: PossibleView) => void
-  allowedStages: string[]
   temporalStages: ITemporalStagesState
-  currentStageType: PossibleCurrentStageType
+
+  gallery: IGallery[]
 }
 
 const ScreensContext = createContext({} as ScreensContextType)
@@ -34,7 +44,6 @@ export const useScreensContext = () => useContext(ScreensContext)
 export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const { Provider } = ScreensContext
 
-  const { stages, addNewAllowedStage, allowedStages } = useGetStages()
   const temporalStages = useGetTemoralStages()
 
   const [userLogged, setUserLogged] = useState<PossibleUserLoggedState>('none')
@@ -43,6 +52,16 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
   const [gameTitle, setGameTitle] = useState('')
   const [currentStage, setCurrentStage] = useState<IStage | null>(null)
   const [currentStageType] = useState<PossibleCurrentStageType>('full')
+  const [events] = useState<EventType[]>(appConfig.events)
+  const [currentEvent, setCurrentEventState] = useState<EventType | null>(null)
+
+  const { stages, addNewAllowedStage, allowedStages } =
+    useGetStages(currentEvent)
+
+  const setCurrentEvent = (event: EventType) => {
+    setCurrentEventState(event)
+    setCurrentView('games')
+  }
 
   const login = (typedPassword: string) => {
     if (typedPassword === password) {
@@ -68,7 +87,6 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     addNewAllowedStage(stages[currentStageIndex + 1].id)
   }
 
-  /* TODO: REPLANTEAR LA APERTURA DE LOS NIVELES */
   const openStage = (currentStage: IStage) => {
     const stageAllowed =
       allowedStages.includes(currentStage.id) ||
@@ -110,6 +128,12 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     allowedStages,
     temporalStages,
     currentStageType,
+
+    events,
+    setCurrentEvent,
+    currentEvent,
+
+    gallery: [],
   }
 
   return <Provider value={context}>{children}</Provider>

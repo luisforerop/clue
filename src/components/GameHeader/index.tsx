@@ -17,7 +17,7 @@ export const GameHeader: FC<GameHeaderProps> = ({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex w-full justify-between items-center">
-        <button onClick={() => goTo('home')}>🏡</button>
+        <button onClick={() => goTo('games')}>⬅️</button>
         <div>{`${currentProgress}/${total}`}</div>
         <div>❕</div>
       </div>

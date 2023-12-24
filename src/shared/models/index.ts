@@ -47,7 +47,7 @@ export interface ICompleteStepByStepData {
   words: WordToCompleteType[]
 }
 
-export type PossibleView = 'init' | 'home' | 'stage' | 'gallery'
+export type PossibleView = 'init' | 'home' | 'stage' | 'gallery' | 'games'
 export type PossibleUserLoggedState = 'none' | 'logged' | 'error'
 export type PossibleStageType = 'add' | 'complete' | 'hangman'
 
@@ -56,6 +56,17 @@ export type IStage = IStageAddWords | IStageHangman | IStageCompleteStepByStep
 export type StateType<StateValueType = any> = {
   set: React.Dispatch<React.SetStateAction<StateValueType>>
   value: StateValueType
+}
+
+/* GAMES */
+
+export type EventType = {
+  stages: IStage[]
+  allowedStages: string[]
+  limitDate?: string | Date
+  ad?: TemporalStagesAdType | null
+  eventName: string
+  id: string
 }
 
 /* TEMPORAL STAGES  */
@@ -75,4 +86,12 @@ export interface ITemporalStagesState extends ITemporalStagesConfig {
   allowedStages: string[]
   nextTemporalStage: () => void
   limitDate: Date
+}
+
+/* GALLERY */
+
+export type IGallery = {
+  images: {
+    src: string
+  }[]
 }

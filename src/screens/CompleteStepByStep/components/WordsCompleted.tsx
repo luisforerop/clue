@@ -42,7 +42,7 @@ export const WordsCompleted: FC<WordsCompletedProps> = ({ wordsCompleted }) => {
     return wordsUnlocked
   }, [currentStage?.data?.words, wordsCompleted])
 
-  if (wordsCompleted.length === 0) {
+  if (wordsCompleted.length === 0 && wordsToShow.length === 0) {
     return <EmptyMessage />
   }
 
