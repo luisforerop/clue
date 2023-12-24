@@ -122,7 +122,7 @@ const chrismasStages: IStage[] = [
     name: '👩‍❤️‍👨 Tu regalito',
     type: 'complete',
     award: {
-      text: `Hoy, aunque el día está oscuro, tú brillas con tu luz.\n\nAunque el sol no sale, tú, mi sol, calienta mi día.\n\nY se qué aunque tenemos mucho por crecer, lo más lindo es pensar en que caminando juntos este camino hasta donde pondamos, llegaremos a esta playa, convertidos en la versión de nosotros mismos por la que tanto habremos trabajado, juntos.`,
+      text: `Mor, hace un tiempo me dijiste que cuando eras pequeña querías una caja registradora de navidad, pero que no había sido posible.\n\nHoy, durante la primera navidad que pasamos juntos, he decidido hacerte este regalo.\n\nQuería comprarte una caja registradora y enviártela, sin embargo, creí que hacerla sería más especial. Estuve mirando algunas cositas de IoT para ver si podía conectar un dispositivo físico con algo virtual pero no alcancé a descifrar todo, y el proceso de fabricación se me complicó un tris.\n\nAsí que decidí crearte esta simulación de caja registradora. Quizás podamos agregarle algo para crear un jueguito para hacerlo juntos, o agregar más productos. Por ahora espero que la disfrutes mucho.\n\nTu regalo:\n\n[Haz clic >>> 🎁](https://luisforerop.github.io/cash-register/)`,
     },
     data: {
       words: [
@@ -143,21 +143,21 @@ const events: EventType[] = [
   {
     id: '01',
     allowedStages: ['01', '02', '03'],
-    eventName: 'Nosotros en el 2023',
+    eventName: '👩‍❤️‍👨 Nosotros en el 2023',
     stages: stages,
     limitDate: '',
   },
   {
     id: '02-months',
     allowedStages: ['151223-01'],
-    eventName: 'Feliz sexto mes',
+    eventName: '💫 Feliz sexto mes',
     stages: sixthMonthStages,
     limitDate: '',
   },
   {
     id: '03-chrismas',
     allowedStages: ['251223-01'],
-    eventName: 'Feliz navidad',
+    eventName: '🎄 Feliz navidad',
     stages: chrismasStages,
     limitDate: '',
   },
