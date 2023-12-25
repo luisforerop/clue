@@ -87,11 +87,3 @@ export interface ITemporalStagesState extends ITemporalStagesConfig {
   nextTemporalStage: () => void
   limitDate: Date
 }
-
-/* GALLERY */
-
-export type IGallery = {
-  images: {
-    src: string
-  }[]
-}

@@ -8,6 +8,7 @@ import {
   GameHeaderProps,
   WinComponent,
 } from '.'
+import { useScreensContext } from '../providers'
 
 interface GameLayoutProps extends GameHeaderProps, FormInputProps {}
 
@@ -18,15 +19,18 @@ export const GameLayout: FC<PropsWithChildren<GameLayoutProps>> = ({
   title,
   total,
 }) => {
+  const { newAward, currentStage } = useScreensContext()
+
+  const [openModal, setOpenModal] = useState(false)
   const levelCompleted = useMemo(
     () => total === currentProgress,
     [total, currentProgress]
   )
-  const [openModal, setOpenModal] = useState(false)
 
   useEffect(() => {
     if (levelCompleted) {
       setOpenModal(levelCompleted)
+      currentStage?.award && newAward(currentStage.award)
     }
   }, [levelCompleted])
 

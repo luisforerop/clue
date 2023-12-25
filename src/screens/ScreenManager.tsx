@@ -1,6 +1,7 @@
 import {
   AddWords,
   CompleteStepByStep,
+  Gallery,
   Games,
   HangmanGame,
   Home,
@@ -23,6 +24,8 @@ export const ScreenManager = () => {
   if (currentView === 'games') return <Games />
 
   if (currentView === 'home') return <Home />
+
+  if (currentView === 'gallery') return <Gallery />
 
   if (!currentStage) return null
 

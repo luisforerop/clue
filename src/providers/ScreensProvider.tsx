@@ -1,9 +1,9 @@
 import type { FC, PropsWithChildren } from 'react'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { useGetStages, useGetTemoralStages } from '../hooks'
+import { useGallery, useGetStages, useGetTemoralStages } from '../hooks'
 import {
+  AwardType,
   EventType,
-  IGallery,
   IStage,
   ITemporalStagesState,
   PossibleUserLoggedState,
@@ -34,7 +34,8 @@ export interface ScreensContextType {
   goTo: (viewToGo: PossibleView) => void
   temporalStages: ITemporalStagesState
 
-  gallery: IGallery[]
+  gallery: AwardType[]
+  newAward: (award: AwardType) => void
 }
 
 const ScreensContext = createContext({} as ScreensContextType)
@@ -57,6 +58,7 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { stages, addNewAllowedStage, allowedStages } =
     useGetStages(currentEvent)
+  const { gallery, newAward } = useGallery()
 
   const setCurrentEvent = (event: EventType) => {
     setCurrentEventState(event)
@@ -114,6 +116,8 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     setGameTitle(gameTitle)
   }, [])
 
+  useEffect(() => {}, [gallery])
+
   const context: ScreensContextType = {
     stages,
     userLogged,
@@ -133,7 +137,8 @@ export const ScreensProvider: FC<PropsWithChildren> = ({ children }) => {
     setCurrentEvent,
     currentEvent,
 
-    gallery: [],
+    gallery,
+    newAward,
   }
 
   return <Provider value={context}>{children}</Provider>

@@ -17,8 +17,6 @@ export const AddWords = () => {
     )
   }, [currentStage?.data])
 
-  useEffect(() => {}, [])
-
   const addWord = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
 

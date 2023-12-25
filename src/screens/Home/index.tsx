@@ -1,11 +1,12 @@
+import { ScreenContainer } from '../../components'
 import { useScreensContext } from '../../providers'
+import { viewInfo } from '../../shared/constants'
 
 export const Home = () => {
-  const { events, setCurrentEvent } = useScreensContext()
+  const { events, setCurrentEvent, goTo, gameTitle } = useScreensContext()
 
   return (
-    <div className="flex flex-col gap-8 p-8">
-      <h1 className="text-4xl font-semibold">Es tiempo de jugar</h1>
+    <ScreenContainer title={gameTitle}>
       <div className="flex flex-col gap-2">
         {events.map((event) => (
           <button key={event.id} onClick={() => setCurrentEvent(event)}>
@@ -13,6 +14,9 @@ export const Home = () => {
           </button>
         ))}
       </div>
-    </div>
+      <div className="flex flex-col gap-2">
+        <button onClick={() => goTo('gallery')}>{viewInfo.gallery.name}</button>
+      </div>
+    </ScreenContainer>
   )
 }
